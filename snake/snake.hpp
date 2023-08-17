@@ -14,9 +14,6 @@
 // graphics
 #include <SFML/Graphics.hpp>
 
-#include "../NEAT/phenotype/phenotype.hpp"
-#include "../NEAT/genotype/genotype.hpp"
-#include "../NEAT/neat.hpp"
 #include "utils/utils.hpp"
 
 namespace Utils {
@@ -83,14 +80,9 @@ namespace Snake {
 
         int getApplesEaten();
 
-        void AIKey(int key);
-
         bool gameStatus();
-
-        std::unique_ptr<std::map<int, double>> getBoard();
     };
 
     void checkKey(SnakeGame* snake);
     void runSnakeGraphics();
-    void runSnakeHeadless(int idef);
 };

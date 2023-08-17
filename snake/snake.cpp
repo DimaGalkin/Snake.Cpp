@@ -239,44 +239,8 @@ int Snake::SnakeGame::getApplesEaten() {
     return applesEaten;
 }
 
-void Snake::SnakeGame::AIKey(int key) {
-    std::cout << key << std::endl;
-    if (key == 0) {
-        handleKey({-1, 0});
-    } else if (key == 1) {
-        handleKey({1, 0});
-    } else if (key == 2) {
-        handleKey({0, -1});
-    } else if (key == 3) {
-        handleKey({0, 1});
-    } else {
-        std::cout << "Invalid key" << std::endl;
-    }
-}
-
 bool Snake::SnakeGame::gameStatus() {
     return gameOver;
-}
-
-std::unique_ptr<std::map<int, double>> Snake::SnakeGame::getBoard() {
-    std::unique_ptr<std::map<int, double>> exportBoard = std::make_unique<std::map<int, double>>();
-
-    for (int i = 0; i < snakePos.size(); i++) {
-        exportBoard->at(i + 6);
-    }
-
-    exportBoard->at(0) = (double)(applePos.x) / 100; // apple x
-    exportBoard->at(1) = (double)(applePos.y) / 100; // apple y
-    
-    int snakeHeadx = (double)(snakePos.back().x);
-    int snakeHeady = (double)(snakePos.back().y);
-
-    exportBoard->at(2) = snakeHeady / 100; // distance to top wall
-    exportBoard->at(3) = snakeHeadx / 100; // distance to left wall
-    exportBoard->at(4) = (double)(500 - snakeHeady) / 100; // distance to bottom wall
-    exportBoard->at(5) = (double)(500 - snakeHeadx) / 100; // distance to right wall
-
-    return std::move(exportBoard);
 }
 
 // changes the direction vector of the snake based on the key pressed
@@ -359,34 +323,4 @@ void Snake::runSnakeGraphics() {
         
         window.display();
     }
-}
-
-void Snake::runSnakeHeadless(int idef) {
-    sf::RenderWindow window;
-
-    Snake::SnakeGame snake (&window);
-    Utils::FrameTimeHandler frameTime;
-    NEAT::InovDescriptor GIDTptr;
-    NEAT::Player player(&GIDTptr);
-
-
-    player.initNetwork(2500, 4);
-
-    snake.createSprites(250, 250, 3);
-    snake.initialRender();
-
-    frameTime.setStart();
-
-    while (snake.gameStatus() == false) {
-        if (frameTime.diff() >= 200) {
-            frameTime.setStart();
-
-            int dir = player.action(std::move(snake.getBoard()));
-            snake.AIKey(dir - 2500);
-
-            snake.gameLoop();
-        }
-    }
-
-    std::cout << "Apples Eaten: [" << snake.getApplesEaten() << "] by idef [" << idef << "]" << std::endl;
 }
