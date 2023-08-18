@@ -28,16 +28,16 @@ namespace structs {
 namespace templates {
     class Text {
     private:
-        sf::RenderWindow *window;
+        sf::RenderWindow *window_;
 
-        sf::Font font;
-        sf::Text textClass;
+        sf::Font font_;
+        sf::Text textClass_;
     public:
         Text(sf::RenderWindow *windowP, structs::TextParams params) {
-            window = windowP;
+            window_ = windowP;
 
-            font.loadFromFile("font.otf");
-            textClass.setFont(font);
+            font_.loadFromFile("font.otf");
+            textClass_.setFont(font_);
 
             setData(params.size, params.color);
             updateText(params.str);
@@ -45,21 +45,21 @@ namespace templates {
         }
 
         void setData(int size, sf::Color color) {
-            textClass.setCharacterSize(size);
-            textClass.setFillColor(color);
+            textClass_.setCharacterSize(size);
+            textClass_.setFillColor(color);
         }
 
         void updateText(std::string text) {
-            textClass.setString(text);
+            textClass_.setString(text);
         }
 
         void centre(int xOff, int yOff) {
-            auto textSize = textClass.getLocalBounds();
-            textClass.setPosition((504 / 2) - (textSize.width / 2) + xOff, (504 / 2) - textSize.height + yOff);
+            auto textSize = textClass_.getLocalBounds();
+            textClass_.setPosition((504 / 2) - (textSize.width / 2) + xOff, (504 / 2) - textSize.height + yOff);
         }
 
         void draw() {
-            window->draw(textClass);
+            window_->draw(textClass_);
         }
     };
 };

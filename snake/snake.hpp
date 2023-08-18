@@ -31,23 +31,23 @@ namespace Utils {
 namespace Snake {
     class SnakeGame {
     private:
-        sf::RenderWindow* window;
-        sf::RectangleShape apple;
-        std::deque<sf::RectangleShape> snake;
-        std::deque<structs::Vec2> snakePos;
-        std::unordered_set<int> blackSquares;
-        structs::Vec2 movVec;
-        structs::Vec2 direction = {1, 0};
-        structs::Vec2 applePos = randomVec2();
-        int applesEaten = 0;
-        int snakeLength = 0;
-        int borderSize = 2;
-        sf::Color bord = sf::Color{124, 108, 230};
-        std::vector<sf::RectangleShape> borders;
-        bool graphics = true;
-        bool gameOver = false;
+        sf::RenderWindow* window_;
+        sf::RectangleShape apple_;
+        std::deque<sf::RectangleShape> snake_;
+        std::deque<structs::Vec2> snakePos_;
+        std::unordered_set<int> blackSquares_;
+        structs::Vec2 movVec_;
+        structs::Vec2 direction_ = {1, 0};
+        structs::Vec2 applePos_ = randomVec2();
+        int applesEaten_ = 0;
+        int snakeLength_ = 0;
+        int borderSize_ = 2;
+        sf::Color bord_ = sf::Color{124, 108, 230};
+        std::vector<sf::RectangleShape> borders_;
+        bool graphics_ = true;
+        bool gameOver_ = false;
     public:
-        int scaleFactor = 10;
+        int scaleFactor_ = 10;
 
         SnakeGame(sf::RenderWindow *window);
 
@@ -84,5 +84,5 @@ namespace Snake {
     };
 
     void checkKey(SnakeGame* snake);
-    void runSnakeGraphics();
+    void runGraphics();
 };
