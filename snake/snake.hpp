@@ -19,9 +19,9 @@
 namespace Utils {
     class FrameTimeHandler {
         private:
-            std::chrono::_V2::system_clock::time_point start;
-            std::chrono::_V2::system_clock::time_point now;
-            std::chrono::microseconds duration;
+            std::chrono::_V2::system_clock::time_point start_;
+            std::chrono::_V2::system_clock::time_point now_;
+            std::chrono::microseconds duration_;
         public:
             void setStart();
             double diff();
@@ -32,53 +32,50 @@ namespace Snake {
     class SnakeGame {
     private:
         sf::RenderWindow* window_;
+
+        const sf::Color bord_ = sf::Color{124, 108, 230};
+
         sf::RectangleShape apple_;
+        
+        std::vector<sf::RectangleShape> borders_;
+
         std::deque<sf::RectangleShape> snake_;
         std::deque<structs::Vec2> snakePos_;
+        
         std::unordered_set<int> blackSquares_;
+        
         structs::Vec2 movVec_;
-        structs::Vec2 direction_ = {1, 0};
-        structs::Vec2 applePos_ = randomVec2();
+        structs::Vec2 direction_;
+        structs::Vec2 applePos_;
+        
         int applesEaten_ = 0;
         int snakeLength_ = 0;
-        int borderSize_ = 2;
-        sf::Color bord_ = sf::Color{124, 108, 230};
-        std::vector<sf::RectangleShape> borders_;
-        bool graphics_ = true;
+        const int borderSize_ = 2;
+        const int scaleFactor_ = 10;
+
+        const bool graphics_ = true;
         bool gameOver_ = false;
     public:
-        int scaleFactor_ = 10;
-
         SnakeGame(sf::RenderWindow *window);
 
-        int Vec2Int(int x, int y);
-        double Vec2Double(int x, int y);
+        structs::Vec2 randomVec2();
 
         sf::RectangleShape createSquare(sf::Color color);
 
         void createSprites(int x, int y, int length);
-
         void drawSprites();
-
         void checkBounds();
-
         void checkCollision();
-
         void touchingApple();
-
         void moveSnake();
-
         void gameLoop();
-
         void initialRender();
-
         void handleKey(structs::Vec2 vec);
-
-        structs::Vec2 randomVec2();
-
         void drawBorder();
 
+        int Vec2Int(int x, int y);
         int getApplesEaten();
+        int getScaleFactor();
 
         bool gameStatus();
     };

@@ -1,39 +1,39 @@
 #include "snake.hpp"
 
 void Utils::FrameTimeHandler::setStart() {
-    start = std::chrono::high_resolution_clock::now();
+    start_ = std::chrono::high_resolution_clock::now();
 }
 
 double Utils::FrameTimeHandler::diff() {
-    now = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(now - start);
+    now_ = std::chrono::high_resolution_clock::now();
+    duration_ = std::chrono::duration_cast<std::chrono::microseconds>(now_ - start_);
 
-    return duration.count() / 1000;
+    return duration_.count() / 1000;
 }
 
-Snake::SnakeGame::SnakeGame(sf::RenderWindow *window) {
+Snake::SnakeGame::SnakeGame(sf::RenderWindow* window) {
     window_ = window;
 
     // create borders
     sf::RectangleShape top (sf::Vector2f(54 * scaleFactor_, 2));
     top.setFillColor(bord_);
     top.setPosition(0, 0);
-    borders_.push_back(top);
+    borders_.emplace_back(top);
 
     sf::RectangleShape bottom(sf::Vector2f(54 * scaleFactor_, 2));
     bottom.setFillColor(bord_);
     bottom.setPosition(0, 52 * scaleFactor_);
-    borders_.push_back(bottom);
+    borders_.emplace_back(bottom);
 
     sf::RectangleShape left(sf::Vector2f(2, 54 * scaleFactor_));
     left.setFillColor(bord_);
     left.setPosition(0, 0);
-    borders_.push_back(left);
+    borders_.emplace_back(left);
 
     sf::RectangleShape right(sf::Vector2f(2, 54 * scaleFactor_));
     right.setFillColor(bord_);
     right.setPosition(52 * scaleFactor_, 0);
-    borders_.push_back(right);
+    borders_.emplace_back(right);
 
 
     // seed random number generator
@@ -41,6 +41,9 @@ Snake::SnakeGame::SnakeGame(sf::RenderWindow *window) {
 
     // set starting direction_
     movVec_ = {1, 0};
+    direction_ = {1, 0};
+    
+    applePos_ = randomVec2();
 }
 
 // creates unique integer from a given vector (used for unordered_set)
@@ -60,17 +63,17 @@ void Snake::SnakeGame::createSprites(int x, int y, int length) {
     snakeLength_ = length;
 
     for (int i = 0; i < length; ++i) {
-        snakePos_.push_back(structs::Vec2{x + (i * scaleFactor_), y});
+        snakePos_.emplace_back(x + (i * scaleFactor_), y);
         blackSquares_.insert(Vec2Int(x + (i * scaleFactor_), y));
 
         auto square = createSquare(sf::Color::Black);
 
-        square.setPosition(snakePos_.at(i).x + borderSize_, snakePos_.at(i).y + borderSize_);
-        snake_.push_back(square);
+        square.setPosition(snakePos_.at(i).x_ + borderSize_, snakePos_.at(i).y_ + borderSize_);
+        snake_.emplace_back(square);
     }
 
     apple_ = createSquare(sf::Color::Red);
-    apple_.setPosition(applePos_.x + borderSize_, applePos_.y + borderSize_);
+    apple_.setPosition(applePos_.x_ + borderSize_, applePos_.y_ + borderSize_);
 }
 
 // draws the boxes held in the snake vector and the apple
@@ -90,7 +93,7 @@ void Snake::SnakeGame::drawSprites() {
 void Snake::SnakeGame::checkBounds() {
     structs::Vec2 head = snakePos_.at(snakePos_.size() - 1);
 
-    gameOver_ = head.x < 0 || head.x > (50 * scaleFactor_) - borderSize_ || head.y < 0 || head.y > (50 * scaleFactor_) - borderSize_;
+    gameOver_ = head.x_ < 0 || head.x_ > (50 * scaleFactor_) - borderSize_ || head.y_ < 0 || head.y_ > (50 * scaleFactor_) - borderSize_;
 }
 
 /*
@@ -118,22 +121,22 @@ void Snake::SnakeGame::touchingApple() {
         int snakeSizem1 = snakePos_.size() - 1;
 
         //xy position of square in front of snake
-        int newx = snakePos_.at(snakeSizem1).x + movVec_.x * scaleFactor_;
-        int newy = snakePos_.at(snakeSizem1).y + movVec_.y * scaleFactor_;
+        int newx = snakePos_.at(snakeSizem1).x_ + movVec_.x_ * scaleFactor_;
+        int newy = snakePos_.at(snakeSizem1).y_ + movVec_.y_ * scaleFactor_;
         
         // add these new coordinates to the snake positions & Black squares
-        snakePos_.push_back(structs::Vec2{newx, newy});
+        snakePos_.emplace_back(newx, newy);
         blackSquares_.insert(Vec2Int(newx, newy));
 
         // add new square to snake and set its position
         auto square = createSquare(sf::Color::Black);
         square.setPosition(newx + borderSize_, newy + borderSize_);
-        snake_.push_back(square);
+        snake_.emplace_back(square);
 
 
         // generate new apple
         applePos_ = randomVec2();
-        apple_.setPosition(applePos_.x + borderSize_, applePos_.y + borderSize_);
+        apple_.setPosition(applePos_.x_ + borderSize_, applePos_.y_ + borderSize_);
 
         snakeLength_ += 1;
         applesEaten_ += 1;
@@ -148,17 +151,17 @@ void Snake::SnakeGame::moveSnake() {
     int snakeSizem1 = snakePos_.size() - 1;
 
     // position of square in front of snake
-    int newx = snakePos_.at(snakeSizem1).x + movVec_.x * scaleFactor_;
-    int newy = snakePos_.at(snakeSizem1).y + movVec_.y * scaleFactor_;
+    int newx = snakePos_.at(snakeSizem1).x_ + movVec_.x_ * scaleFactor_;
+    int newy = snakePos_.at(snakeSizem1).y_ + movVec_.y_ * scaleFactor_;
 
     // add new position to snake positions
-    snakePos_.push_back(structs::Vec2{newx, newy});
+    snakePos_.emplace_back(newx, newy);
     blackSquares_.insert(Vec2Int(newx, newy));
 
     // remove the trailing square
     structs::Vec2 first = snakePos_.at(0);
 
-    blackSquares_.erase(Vec2Int(first.x, first.y));
+    blackSquares_.erase(Vec2Int(first.x_, first.y_));
     snakePos_.erase(snakePos_.begin());
 
     // move the last square to the front
@@ -166,7 +169,7 @@ void Snake::SnakeGame::moveSnake() {
     std::rotate(it, it + 1, snake_.end());
 
     // draw the square which was at the back at the front
-    snake_.at(snakeSizem1).setPosition(snakePos_.at(snakeSizem1).x + borderSize_, snakePos_.at(snakeSizem1).y + borderSize_);
+    snake_.at(snakeSizem1).setPosition(snakePos_.at(snakeSizem1).x_ + borderSize_, snakePos_.at(snakeSizem1).y_ + borderSize_);
 
     direction_ = movVec_;
 }
@@ -253,6 +256,10 @@ bool Snake::SnakeGame::gameStatus() {
     return gameOver_;
 }
 
+int Snake::SnakeGame::getScaleFactor() {
+    return scaleFactor_;
+}
+
 // changes the direction_ vector of the snake based on the key pressed
 void Snake::checkKey(SnakeGame* snake) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -275,7 +282,7 @@ void Snake::runGraphics() {
     Snake::SnakeGame snake (&window);
     Utils::FrameTimeHandler frameTime;
 
-    snake.createSprites(25 * snake.scaleFactor_, 25 * snake.scaleFactor_, 3);
+    snake.createSprites(25 * snake.getScaleFactor(), 25 * snake.getScaleFactor(), 3);
     snake.initialRender();
 
     frameTime.setStart();

@@ -4,16 +4,23 @@
 
 namespace structs {
     struct Vec2 {
-        int x;
-        int y;
+        int x_;
+        int y_;
 
         Vec2 operator*(const int other) {
-            return {x * -1, y * -1};
+            return {x_ * -1, y_ * -1};
         }
 
         bool operator==(const Vec2 other) {
-            return (x == other.x) && (y == other.y);
+            return (x_ == other.x_) && (y_ == other.y_);
         }
+
+        Vec2() = default;
+
+        Vec2(int x, int y) :
+            x_{x},
+            y_{y}
+        {}
     };
 
     struct TextParams {
