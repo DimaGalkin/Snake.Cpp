@@ -20,7 +20,7 @@ namespace structs {
         Vec2(int x, int y) :
             x_{x},
             y_{y}
-        {}
+        {};
     };
 
     struct TextParams {
@@ -40,7 +40,7 @@ namespace templates {
         sf::Font font_;
         sf::Text textClass_;
     public:
-        Text(sf::RenderWindow *windowP, structs::TextParams params) {
+        Text(sf::RenderWindow* windowP, structs::TextParams params) {
             window_ = windowP;
 
             font_.loadFromFile("font.otf");

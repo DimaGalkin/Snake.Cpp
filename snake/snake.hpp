@@ -55,29 +55,33 @@ namespace Snake {
 
         const bool graphics_ = true;
         bool gameOver_ = false;
-    public:
-        SnakeGame(sf::RenderWindow *window);
 
         structs::Vec2 randomVec2();
 
         sf::RectangleShape createSquare(sf::Color color);
 
-        void createSprites(int x, int y, int length);
         void drawSprites();
         void checkBounds();
         void checkCollision();
         void touchingApple();
         void moveSnake();
-        void gameLoop();
-        void initialRender();
-        void handleKey(structs::Vec2 vec);
-        void drawBorder();
 
         int Vec2Int(int x, int y);
-        int getApplesEaten();
-        int getScaleFactor();
 
-        bool gameStatus();
+        public:
+            SnakeGame(sf::RenderWindow *window);
+
+            int getScaleFactor();
+
+            void createSprites(int x, int y, int length);
+            void initialRender();
+            void gameLoop();
+            void handleKey(structs::Vec2 vec);
+            void drawBorder();
+
+            bool gameStatus();
+
+            int getApplesEaten();
     };
 
     void checkKey(SnakeGame* snake);

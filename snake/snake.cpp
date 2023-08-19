@@ -287,11 +287,13 @@ void Snake::runGraphics() {
 
     frameTime.setStart();
 
-    while (window.isOpen() && snake.gameStatus() == false) {
+    while (window.isOpen() && !snake.gameStatus()) {
         sf::Event event;
 
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
         }
 
         // 200ms per cycle
@@ -329,7 +331,9 @@ void Snake::runGraphics() {
         sf::Event event;
 
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
         }
 
         window.clear(sf::Color::White);
