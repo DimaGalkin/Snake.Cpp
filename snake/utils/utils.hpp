@@ -11,7 +11,7 @@ namespace structs {
             return {x_ * -1, y_ * -1};
         }
 
-        bool operator==(const Vec2 other) {
+        bool operator==(const Vec2& other) {
             return (x_ == other.x_) && (y_ == other.y_);
         }
 
